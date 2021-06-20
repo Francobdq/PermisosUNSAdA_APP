@@ -4,23 +4,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,9 +68,71 @@ public class escaner extends AppCompatActivity {
         }
     }
 
+    /*private void PutRequest(String id_solicitud){
+        String url =  ConexionJSON.HOST + ConexionJSON.updateSolicitud + id_solicitud  + "/" + idEdificio;
+
+        StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //user = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    try {
+
+                        boolean success = jsonObject.getBoolean("success");
+                        Toast.makeText(getApplicationContext(), "Intentanding ", Toast.LENGTH_LONG).show();
+                        if(success){
+                            // todo bien
+                            System.out.println("PUEDE ACCEDER");
+                            Toast.makeText(getApplicationContext(), "TODO OK", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            // edificio incorrecto
+                            System.out.println("Edificio Incorrecto ");
+                            Toast.makeText(getApplicationContext(), "EDIFICIO INCORRECTO " + jsonObject.getString("data") + " " + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("volley error", error.toString());
+
+
+            }
+        }) {
+            @Override
+            public String getBodyContentType() { //override
+//  the content type because the request is string not JSON
+//   request note that if you used JSON request it will don't work with rest
+
+                return "application/json";
+            }
+            //override getParams so that the server can receive the parameters otherwise
+//  parameters will be null at server
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("presente", "1");
+                return parameters;
+            }
+        };
+
+        requestQueue.add(request);
+    }*/
+
+
     private void updateSolicitud(String id_solicitud) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = ConexionJSON.HOST + ConexionJSON.updateSolicitud + id_solicitud  + "/" + idEdificio;
+        String url = PEDIR_URL.UpdateSolicitud(id_solicitud,idEdificio);// ConexionJSON.HOST + ConexionJSON.updateSolicitud + id_solicitud  + "/" + idEdificio;
 
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -181,8 +242,8 @@ public class escaner extends AppCompatActivity {
     }*/
 
     private void QRScaneado(String qr){
-        String url = ConexionJSON.HOST + ConexionJSON.peticionQR + qr;
-        Toast.makeText(getApplicationContext(), "v2", Toast.LENGTH_SHORT).show();
+        String url = PEDIR_URL.PeticionQR(qr);//ConexionJSON.HOST + ConexionJSON.peticionQR + qr;
+        Toast.makeText(getApplicationContext(), "v3", Toast.LENGTH_SHORT).show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

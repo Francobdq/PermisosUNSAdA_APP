@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void edificioASpinner(){
-        String url = ConexionJSON.HOST + ConexionJSON.peticionEdificios;
+        String url = PEDIR_URL.PeticionEdificios();//ConexionJSON.HOST + ConexionJSON.peticionEdificios;
 
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
