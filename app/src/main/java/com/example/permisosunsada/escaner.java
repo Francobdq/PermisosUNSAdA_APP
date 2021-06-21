@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -42,11 +43,13 @@ public class escaner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escaner);
+        getSupportActionBar().hide();
         Intent intent = getIntent();
         idEdificio = intent.getIntExtra("idEdificio",-1); //if it's a string you stored.
         requestQueue = Volley.newRequestQueue(escaner.this);
 
         //Toast.makeText(getApplicationContext(), "idEdificio: " + idEdificio, Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -226,39 +229,9 @@ public class escaner extends AppCompatActivity {
         queue.add(putRequest);
     }
 
-    /*private void updateSolicitud(String id_solicitud){
-        String url = ConexionJSON.HOST + ConexionJSON.updateSolicitud + id_solicitud  + "/" + idEdificio;
-
-        final JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("presente", 1);
-        } catch (JSONException e) {
-            // handle exception
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, jsonObject, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-
-        requestQueue.add(jsonObjectRequest);
-    }*/
-
     private void QRScaneado(String qr){
         String url = PEDIR_URL.PeticionQR(qr);//ConexionJSON.HOST + ConexionJSON.peticionQR + qr;
-        Toast.makeText(getApplicationContext(), "v3", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "v3", Toast.LENGTH_SHORT).show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

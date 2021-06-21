@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,7 +24,9 @@ public class tick extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_tick);
+        getSupportActionBar().hide();
         Intent intent = getIntent();
         int ani = intent.getIntExtra("tipoAni",1);
         String warning_msg = intent.getStringExtra("warning_msg");
