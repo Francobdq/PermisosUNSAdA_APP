@@ -9,11 +9,13 @@
     <Button
         android:id="@+id/button2"
         android:layout_width="236dp"
-        android:layout_height="206dp"
+        android:layout_height="120dp"
         android:onClick="escanear"
         android:text="ESCANEAR"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

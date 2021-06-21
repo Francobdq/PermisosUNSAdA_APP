@@ -2,20 +2,23 @@ package com.example.permisosunsada;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -33,6 +36,8 @@ public class escaner extends AppCompatActivity {
     int idEdificio;
     RequestQueue requestQueue;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,7 @@ public class escaner extends AppCompatActivity {
         Intent intent = getIntent();
         idEdificio = intent.getIntExtra("idEdificio",-1); //if it's a string you stored.
         requestQueue = Volley.newRequestQueue(escaner.this);
+
         //Toast.makeText(getApplicationContext(), "idEdificio: " + idEdificio, Toast.LENGTH_SHORT).show();
     }
 
@@ -49,6 +55,13 @@ public class escaner extends AppCompatActivity {
     }
 
 
+
+    private void irAAnimacion(int tipoAni, String warning_msg){
+        Intent myIntent = new Intent(escaner.this, tick.class);
+        myIntent.putExtra("tipoAni", tipoAni); //Optional parameters
+        myIntent.putExtra("warning_msg", warning_msg); //Optional parameters
+        escaner.this.startActivity(myIntent);
+    }
 
 
     @Override
@@ -157,12 +170,14 @@ public class escaner extends AppCompatActivity {
                             if(success){
                                 // todo bien
                                 System.out.println("PUEDE ACCEDER");
-                                Toast.makeText(getApplicationContext(), "TODO OK", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "TODO OK", Toast.LENGTH_SHORT).show();
+                                irAAnimacion(tick.TICK, "");
                             }
                             else {
                                 // edificio incorrecto
                                 System.out.println("Edificio Incorrecto ");
-                                Toast.makeText(getApplicationContext(), "EDIFICIO INCORRECTO " + response.getString("data") + " " + response.getString("message"), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "EDIFICIO INCORRECTO " + response.getString("data") + " " + response.getString("message"), Toast.LENGTH_SHORT).show();
+                                irAAnimacion(tick.WARNING, "Edificio incorrecto.");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -255,7 +270,9 @@ public class escaner extends AppCompatActivity {
                             JSONObject data = response.getJSONObject("data");
                             if(data == null){
                                 System.out.println("QR INEXISTENTE.");
-                                Toast.makeText(getApplicationContext(), "QR inexistente", Toast.LENGTH_SHORT).show();
+
+                                irAAnimacion(tick.DANGER, "EL QR NO ES CORRECTO.");
+                                //Toast.makeText(getApplicationContext(), "QR inexistente", Toast.LENGTH_SHORT).show();
                                 return; // QR NO EXISTE.
                             }
                             int presenteIngresante = data.getInt("presente");
@@ -263,8 +280,9 @@ public class escaner extends AppCompatActivity {
 
                             if(presenteIngresante == 1){
                                 // usuario ya ingresado interfaz
-                                System.out.println("Usuario ya ingresado");
-                                Toast.makeText(getApplicationContext(), "Usuario ya ingresado", Toast.LENGTH_SHORT).show();
+                                //System.out.println("Usuario ya ingresado");
+                                irAAnimacion(tick.WARNING, "USUARIO YA INGRESADO.");
+                                //Toast.makeText(getApplicationContext(), "Usuario ya ingresado", Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 updateSolicitud(id_solicitud);
