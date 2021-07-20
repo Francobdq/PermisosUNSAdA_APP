@@ -3,4 +3,9 @@
     <string name="usuario_hint">Usuario</string>
     <string name="password_hint">Contraseña</string>
     <string name="boton_login">Iniciar sesión</string>
+    <string-array name="array_tipo_cifrado">
+        <item>http://</item>
+        <item>https://</item>
+    </string-array>
+
 </resources>

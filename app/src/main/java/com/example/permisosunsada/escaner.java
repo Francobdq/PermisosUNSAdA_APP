@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,9 +37,13 @@ import java.util.Map;
 public class escaner extends AppCompatActivity {
 
 
-    int idEdificio;
+    //int idEdificio;
     RequestQueue requestQueue;
 
+
+    // para el spinner
+    Spinner edificiosSpinner;
+    String[] edificios;
 
 
     @Override
@@ -45,11 +52,11 @@ public class escaner extends AppCompatActivity {
         setContentView(R.layout.activity_escaner);
         getSupportActionBar().hide();
         Intent intent = getIntent();
-        idEdificio = intent.getIntExtra("idEdificio",-1); //if it's a string you stored.
+        //idEdificio = intent.getIntExtra("idEdificio",-1); //if it's a string you stored.
         requestQueue = Volley.newRequestQueue(escaner.this);
 
         //Toast.makeText(getApplicationContext(), "idEdificio: " + idEdificio, Toast.LENGTH_SHORT).show();
-
+        inicializarSpinner();
     }
 
 
@@ -76,7 +83,7 @@ public class escaner extends AppCompatActivity {
         String valorDelQR = result.getContents();
 
         if (valorDelQR != null) {
-            Toast.makeText(getApplicationContext(), "QR: "+ valorDelQR, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "QR: "+ valorDelQR, Toast.LENGTH_SHORT).show();
             QRScaneado(valorDelQR);
         }
         else{
@@ -148,7 +155,7 @@ public class escaner extends AppCompatActivity {
 
     private void updateSolicitud(String id_solicitud) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = PEDIR_URL.UpdateSolicitud(id_solicitud,idEdificio);// ConexionJSON.HOST + ConexionJSON.updateSolicitud + id_solicitud  + "/" + idEdificio;
+        String url = PEDIR_URL.UpdateSolicitud(id_solicitud,comprobarSpinner());// ConexionJSON.HOST + ConexionJSON.updateSolicitud + id_solicitud  + "/" + idEdificio;
 
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -180,7 +187,7 @@ public class escaner extends AppCompatActivity {
                                 // edificio incorrecto
                                 System.out.println("Edificio Incorrecto ");
                                 //Toast.makeText(getApplicationContext(), "EDIFICIO INCORRECTO " + response.getString("data") + " " + response.getString("message"), Toast.LENGTH_SHORT).show();
-                                irAAnimacion(tick.WARNING, "Edificio incorrecto.");
+                                irAAnimacion(tick.DANGER, "Edificio incorrecto.");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -275,5 +282,76 @@ public class escaner extends AppCompatActivity {
                 });
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+
+    private void inicializarSpinner(){
+        /*getNames a = new getNames();
+        a.onPreExecute();
+        a.doInBackground();*/
+
+        edificiosSpinner = (Spinner)findViewById(R.id.spinner2);
+
+
+        edificioASpinner();
+
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, edificios);
+        //edificiosSpinner.setAdapter(adapter);
+    }
+
+    private void edificioASpinner(){
+        String url = PEDIR_URL.PeticionEdificios();//ConexionJSON.HOST + ConexionJSON.peticionEdificios;
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("data");
+                            edificios = new String[jsonArray.length()];
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject edificiosJsonArray = jsonArray.getJSONObject(i);
+
+                                String nombre = edificiosJsonArray.getString("nombre");
+                                edificios[i] = nombre;
+                            }
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(escaner.this, android.R.layout.simple_spinner_dropdown_item, edificios);
+                            edificiosSpinner.setAdapter(adapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private int comprobarSpinner(){
+        String seleccionado = edificiosSpinner.getSelectedItem().toString();
+
+        if(edificios == null){
+            Toast.makeText(getApplicationContext(), "No se pudo establecer internet. Intente de nuevo más tarde.", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+
+        for(int i = 0; i < edificios.length;i++){
+            if(edificios[i].equals(seleccionado)){
+                return i;
+            }
+
+        }
+
+        return  -1;
     }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     //public static String url = "http://www.json-generator.com/api/json/get/cphlRqewGG?indent=2";
 
@@ -44,9 +45,7 @@ public class MainActivity extends AppCompatActivity {
     EditText username;
     EditText password;
 
-    // para el spinner
-    Spinner edificiosSpinner;
-    String[] edificios;
+
 
     RequestQueue requestQueue;
 
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        PEDIR_URL.Inicializar(MainActivity.this);
 
         // obtengo los editText para verificar usuario y contraseña
         username = (EditText)findViewById(R.id.usuarioText);
@@ -63,104 +63,45 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(MainActivity.this);
         // inicializo el spinner con los valores de los edificios
         nameList = new ArrayList<>();
-        inicializarSpinner();
+
+
+        ImageView img = (ImageView) findViewById(R.id.configButton);
+        img.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // your code here
+                irAConfig();
+            }
+        });
+
     }
 
-    private void inicializarSpinner(){
-        /*getNames a = new getNames();
-        a.onPreExecute();
-        a.doInBackground();*/
-
-        edificiosSpinner = (Spinner)findViewById(R.id.spinner2);
-
-
-        edificioASpinner();
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, edificios);
-        //edificiosSpinner.setAdapter(adapter);
+    public void irAConfig(){
+        Toast.makeText(getApplicationContext(), "v5", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, configMenu.class);
+        startActivity(intent);
     }
+
 
     private boolean comprobarLogin(){
-        return username.getText().toString().equals("admin") && password.getText().toString().equals("admin");
+        return true;//username.getText().toString().equals("admin") && password.getText().toString().equals("admin");
     }
 
-    private int comprobarSpinner(){
-        String seleccionado = edificiosSpinner.getSelectedItem().toString();
 
-        if(edificios == null){
-            Toast.makeText(getApplicationContext(), "No se pudo establecer internet. Intente de nuevo más tarde.", Toast.LENGTH_SHORT).show();
-            return -1;
-        }
 
-        for(int i = 0; i < edificios.length;i++){
-            if(edificios[i].equals(seleccionado)){
-                return i;
-            }
-
-        }
-
-        return  -1;
-    }
-
-    private void irAEscanerActivity(int idEdificio){
-        Toast.makeText(getApplicationContext(), "contraseña correcta " + comprobarSpinner(), Toast.LENGTH_SHORT).show();
+    private void irAEscanerActivity(){
+        //Toast.makeText(getApplicationContext(), "contraseña correcta " + comprobarSpinner(), Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, escaner.class);
-        myIntent.putExtra("idEdificio", idEdificio); //Optional parameters
+        //myIntent.putExtra("idEdificio", idEdificio); //Optional parameters
         MainActivity.this.startActivity(myIntent);
     }
 
     public void login(View view) {
-        if (comprobarLogin()) {
-            int idEdificio = comprobarSpinner();
-            if(comprobarSpinner() != -1){
-                irAEscanerActivity(idEdificio+1);
-            }
-
-        } else {
+        if (comprobarLogin())
+            irAEscanerActivity();
+        else
             Toast.makeText(getApplicationContext(), "contraseña equivocada", Toast.LENGTH_SHORT).show();
-        }
 
     }
 
 
-    private void edificioASpinner(){
-        String url = PEDIR_URL.PeticionEdificios();//ConexionJSON.HOST + ConexionJSON.peticionEdificios;
-
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        System.out.println("-------------------------------------------------------------------------------------------------------------------");
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("data");
-                            edificios = new String[jsonArray.length()];
-                            for(int i = 0; i < jsonArray.length(); i++){
-                                JSONObject edificiosJsonArray = jsonArray.getJSONObject(i);
-
-                                String nombre = edificiosJsonArray.getString("nombre");
-                                edificios[i] = nombre;
-                                System.out.println("nombre:" + nombre);
-
-                            }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, edificios);
-                            edificiosSpinner.setAdapter(adapter);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-
-        requestQueue.add(jsonObjectRequest);
-    }
 }
