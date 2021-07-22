@@ -3,6 +3,7 @@ package com.example.permisosunsada;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -23,6 +24,7 @@ public class tick extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // deshabilita la rotación de pantalla
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_tick);

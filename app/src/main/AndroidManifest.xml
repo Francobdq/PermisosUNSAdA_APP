@@ -13,16 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PermisosUNSAdA"
         android:usesCleartextTraffic="true">
-        <activity android:name=".configMenu"></activity>
-        <activity android:name=".tick" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".configMenu" android:screenOrientation="portrait"/>
+        <activity android:name=".tick" android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".escaner" />
+        <activity android:name=".escaner" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
