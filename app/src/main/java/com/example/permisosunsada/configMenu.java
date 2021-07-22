@@ -23,6 +23,7 @@ public class configMenu extends AppCompatActivity{
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // deshabilita la rotación de pantalla
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config_menu);
+        getSupportActionBar().hide();
 
         spinnerDeCifrado = (Spinner) findViewById(R.id.spinner_host);
         //tv_host = (TextView) findViewById(R.id.tv_host);

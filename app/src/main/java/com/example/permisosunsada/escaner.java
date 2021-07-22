@@ -53,6 +53,7 @@ public class escaner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escaner);
         getSupportActionBar().hide();
+
         Intent intent = getIntent();
         //idEdificio = intent.getIntExtra("idEdificio",-1); //if it's a string you stored.
         requestQueue = Volley.newRequestQueue(escaner.this);

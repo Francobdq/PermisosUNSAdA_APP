@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // deshabilita la rotación de pantalla
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         PEDIR_URL.Inicializar(MainActivity.this);
