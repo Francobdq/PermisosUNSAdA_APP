@@ -20,11 +20,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -82,13 +84,6 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-
-    private boolean comprobarLogin(){
-        return true;//username.getText().toString().equals("admin") && password.getText().toString().equals("admin");
-    }
-
-
-
     private void irAEscanerActivity(){
         //Toast.makeText(getApplicationContext(), "contraseña correcta " + comprobarSpinner(), Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, escaner.class);
@@ -97,11 +92,44 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void login(View view) {
-        if (comprobarLogin())
-            irAEscanerActivity();
-        else
-            Toast.makeText(getApplicationContext(), "contraseña equivocada", Toast.LENGTH_SHORT).show();
+        String user = username.getText().toString();
+        String pass = password.getText().toString();
+        String postUrl = PEDIR_URL.PeticionLogin();
 
+        if(user.equals("") || pass.equals("")){
+            Toast.makeText(getApplicationContext(), "Faltan datos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        HashMap<String, Object> postData = new HashMap<>();
+        postData.put("username", user);
+        postData.put("password", pass);
+
+        StringRequest request = new StringRequest(Request.Method.POST, postUrl,
+                new Response.Listener<String>() {
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_SHORT).show();
+                        irAEscanerActivity();
+                    }
+                },
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Usuario o contraseña equivocado " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            public byte[] getBody() {
+                return new JSONObject(postData).toString().getBytes();
+            }
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        Volley.newRequestQueue(this).add(request);
+
+        
     }
 
 

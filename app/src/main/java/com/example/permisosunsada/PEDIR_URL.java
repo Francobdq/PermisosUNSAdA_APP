@@ -26,6 +26,7 @@ public class PEDIR_URL {
     private static String peticionEdificios = "/api/edificio/all";
     private static String peticionQR = "/api/solicitud/find/uuid/";
     private static String updateSolicitud = "/api/solicitud/update/"; // agregar otra al inciio para probar
+    private static String peticionLogin = "/api/login/ingreso";
 
     private static void saveFile(String textoASalvar, Context ctx){
         FileOutputStream fileOutputStream = null;
@@ -96,6 +97,9 @@ public class PEDIR_URL {
         return HOST+peticionEdificios;
     }
 
+    public static String PeticionLogin(){
+        return HOST+peticionLogin;
+    }
 
     /*public static void setCIFRADO(String nuevo_cifrado){
         CIFRADO = nuevo_cifrado;
