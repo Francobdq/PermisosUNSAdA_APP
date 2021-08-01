@@ -2,8 +2,20 @@ package com.example.permisosunsada;
 
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -11,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.Buffer;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -134,6 +148,42 @@ public class PEDIR_URL {
         saveFile(cifrado+host,ctx);
 
 
+    }
+
+
+
+
+
+
+
+    public static boolean hayConexion(Context ctx){
+        if(hayConexionServer(ctx))
+            return true;
+
+        if(hayConexionInternet(ctx)){
+            Toast.makeText(ctx, "No se puede acceder al servidor. Espere un momento, si el problema continua Consulte a un técnico", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(ctx, "No hay conexión a internet. Intente de nuevo más tarde", Toast.LENGTH_LONG).show();
+        }
+
+        return false;
+    }
+
+    private static boolean hayConexionInternet(Context ctx){
+        ConnectivityManager cm =
+                (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+
+
+    // Test the conexion to the server
+    private static boolean hayConexionServer(Context context) {
+        return true;
     }
 
 

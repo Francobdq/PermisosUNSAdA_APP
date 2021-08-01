@@ -10,6 +10,17 @@ import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class tick extends AppCompatActivity {
 
@@ -17,6 +28,11 @@ public class tick extends AppCompatActivity {
     public static int DANGER = 1;
     public static int WARNING = 2;
 
+    public static int QR_INEXISTENTE = 0; // si el qr no existió nunca
+    public static int QR_REPETIDO = 1; // Si el usuario está repetido
+    public static int EDIFICIO_INCORRECTO = 2; // si el edificio es repetido
+    public static int CORRECTO = 3; // todo bien
+    public static int FECHA_INCORRECTA = 4;
 
     Animacion animacionController;
 
@@ -29,14 +45,19 @@ public class tick extends AppCompatActivity {
         setContentView(R.layout.activity_tick);
         getSupportActionBar().hide();
 
-        Intent intent = getIntent();
+        componente = (ImageView) findViewById(R.id.frente);
+        animacionController = new Animacion();
+        fondo = (ImageView) findViewById(R.id.fondo);
+
+        Inicializar();
+
+
+        /*Intent intent = getIntent();
         int ani = intent.getIntExtra("tipoAni",1);
         String warning_msg = intent.getStringExtra("warning_msg");
 
-        animacionController = new Animacion();
-        componente = (ImageView) findViewById(R.id.frente);
         TextView warningmsgTV = (TextView) findViewById(R.id.warningmsg);
-        fondo = (ImageView) findViewById(R.id.fondo);
+
 
         if(ani == TICK){
             // animacion tick
@@ -57,14 +78,70 @@ public class tick extends AppCompatActivity {
             // error cast
         }
 
-        animacionController.Animar(componente,fondo);
+        animacionController.Animar(componente,fondo);*/
+    }
+
+    private void danger(){
+        componente.setImageResource(R.drawable.avd_danger);
+        fondo.setImageResource(R.drawable.avd_red_circle);
+    }
+
+    private void tick(){
+        componente.setImageResource(R.drawable.avd_tick);
+        fondo.setImageResource(R.drawable.avd_green_circle);
+    }
+
+    private void warning(){
+        componente.setImageResource(R.drawable.avd_warning);
+        fondo.setImageResource(R.drawable.avd_warning_circle);
+    }
+
+    private void ShowQRData(String qr, String[] userData){
+        TextView tv_nombreyapellido = (TextView) findViewById(R.id.tv_nombreyapellido);
+        TextView tv_actividad = (TextView) findViewById(R.id.tv_actividad);
+        TextView tv_edificio = (TextView) findViewById(R.id.tv_edificio);
+        TextView tv_dia = (TextView) findViewById(R.id.tv_dia);
+
+        if(userData == null)
+            return;
+
+        tv_nombreyapellido.setText(userData[0]);//data.getString("nombre"));
+        tv_actividad.setText(userData[1]);//data.getString("actividad"));
+        tv_edificio.setText(userData[2]);//data.getString("edificio"));
+        tv_dia.setText(userData[3]);//data.getString("dia"));
     }
 
 
-    private void AnimacionTick(){
+    private void Inicializar() {
+        Intent intent = getIntent();
+        int tipo = intent.getIntExtra("tipoAni",1);
+        String qr = intent.getStringExtra("qr");
+        String[] userData = intent.getStringArrayExtra("userData");
+        TextView warningmsgTV = (TextView) findViewById(R.id.warningmsg);
 
+        if(tipo == QR_INEXISTENTE){
+            danger();
+            warningmsgTV.setText("NO EXISTE ESE QR.");
+        }else if(tipo == QR_REPETIDO){
+            danger();
+            warningmsgTV.setText("EL QR YA FUE UTILIZADO.");
+            ShowQRData(qr, userData);
+        }else if(tipo == EDIFICIO_INCORRECTO){
+            warning();
+            warningmsgTV.setText("EL EDIFICIO NO ES EL CORRECTO.");
+            ShowQRData(qr, userData);
+        }else if(tipo == FECHA_INCORRECTA) {
+            warning();
+            warningmsgTV.setText("LA FECHA NO ES CORRECTA.");
+            ShowQRData(qr, userData);
+        }else if(tipo == CORRECTO){
+            tick();
+            warningmsgTV.setText("");
+            ShowQRData(qr, userData);
+        }
+        else return;
 
-
+        animacionController.Animar(componente,fondo);
     }
 
 }

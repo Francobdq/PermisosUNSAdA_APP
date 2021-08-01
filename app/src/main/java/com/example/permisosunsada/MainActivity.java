@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
 
+        if(!PEDIR_URL.hayConexion(MainActivity.this))
+            return;
+
+
         HashMap<String, Object> postData = new HashMap<>();
         postData.put("username", user);
         postData.put("password", pass);
