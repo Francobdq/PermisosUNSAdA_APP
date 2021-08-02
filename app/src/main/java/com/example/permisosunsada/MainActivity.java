@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void irAConfig(){
-        Toast.makeText(getApplicationContext(), "v5", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "v5", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, configMenu.class);
         startActivity(intent);
     }
@@ -112,14 +112,14 @@ public class MainActivity extends AppCompatActivity{
         StringRequest request = new StringRequest(Request.Method.POST, postUrl,
                 new Response.Listener<String>() {
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_SHORT).show();
                         irAEscanerActivity();
                     }
                 },
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Usuario o contraseña equivocado " + error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Usuario o contraseña equivocado", Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {

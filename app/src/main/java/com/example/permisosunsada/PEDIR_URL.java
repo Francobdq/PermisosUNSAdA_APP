@@ -51,7 +51,7 @@ public class PEDIR_URL {
             Toast.makeText(ctx, "Fichero Salvado en: " + ctx.getFilesDir() + "/" + SAVE_FILE_NAME, Toast.LENGTH_SHORT).show();
             //Log.d("TAG1", "Fichero Salvado en: " + ctx.getFilesDir() + "/" + SAVE_FILE_NAME);
         }catch (Exception e){
-            Toast.makeText(ctx, "Nop: " + e.getMessage() , Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ctx, "Nop: " + e.getMessage() , Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }finally {
             if(fileOutputStream != null){
@@ -68,13 +68,13 @@ public class PEDIR_URL {
     private static void readFile(Context ctx){
         FileInputStream fileInputStream = null;
         try{
-            Toast.makeText(ctx, "Buscando en " + ctx.getFilesDir() + "/" + SAVE_FILE_NAME, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ctx, "Buscando en " + ctx.getFilesDir() + "/" + SAVE_FILE_NAME, Toast.LENGTH_SHORT).show();
             fileInputStream = ctx.openFileInput(SAVE_FILE_NAME); // puede dar una excepcion si el archivo no existe
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String lineaTexto = bufferedReader.readLine();
 
-            Toast.makeText(ctx, "texto:" + lineaTexto, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ctx, "texto:" + lineaTexto, Toast.LENGTH_SHORT).show();
             // si el archivo está vacio es como si no existiera
             if(lineaTexto == null)
                 throw new FileNotFoundException();
@@ -157,17 +157,18 @@ public class PEDIR_URL {
 
 
     public static boolean hayConexion(Context ctx){
-        if(hayConexionServer(ctx))
-            return true;
+        //if(hayConexionServer(ctx))
+            //return true;
 
-        if(hayConexionInternet(ctx)){
-            Toast.makeText(ctx, "No se puede acceder al servidor. Espere un momento, si el problema continua Consulte a un técnico", Toast.LENGTH_LONG).show();
+        if(!hayConexionInternet(ctx)){
+            Toast.makeText(ctx, "No se puede acceder al servidor. Espere un momento, si el problema continua consulte a un técnico", Toast.LENGTH_LONG).show();
+            return false;
         }
-        else{
-            Toast.makeText(ctx, "No hay conexión a internet. Intente de nuevo más tarde", Toast.LENGTH_LONG).show();
-        }
+        /*else{
+            Toast.makeText(ctx, "No se puede acceder al servidor. Revise su conexión a internet e intente de nuevo más tarde", Toast.LENGTH_LONG).show();
+        }*/
 
-        return false;
+        return true;
     }
 
     private static boolean hayConexionInternet(Context ctx){
@@ -183,6 +184,7 @@ public class PEDIR_URL {
 
     // Test the conexion to the server
     private static boolean hayConexionServer(Context context) {
+
         return true;
     }
 

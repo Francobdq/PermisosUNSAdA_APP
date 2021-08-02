@@ -69,8 +69,8 @@ public class escaner extends AppCompatActivity {
 
     public void escanear(View view){
         //System.out.println("---------------aaaaaaaaaaaaaaaaaaaaaaaa-----------------------");
-        QRScaneado("04ce6aeba9634acea442d4ac67142e66");
-        //new IntentIntegrator(this).initiateScan();
+        //QRScaneado("b657146c63474bc4b9a1cdf6984c80e7");
+        new IntentIntegrator(this).initiateScan();
     }
 
 
@@ -93,11 +93,11 @@ public class escaner extends AppCompatActivity {
         String valorDelQR = result.getContents();
 
         if (valorDelQR != null) {
-            Toast.makeText(getApplicationContext(), "QR: "+ valorDelQR, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "QR: "+ valorDelQR, Toast.LENGTH_SHORT).show();
             QRScaneado(valorDelQR);
         }
         else{
-            Toast.makeText(getApplicationContext(), "Operacion cancelada", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Operacion cancelada", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -135,13 +135,13 @@ public class escaner extends AppCompatActivity {
                             if(success){
                                 // todo bien
                                 System.out.println("PUEDE ACCEDER");
-                                Toast.makeText(getApplicationContext(), "TODO OK", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "TODO OK", Toast.LENGTH_SHORT).show();
                                 irAAnimacion(qr, tick.CORRECTO, userData);
                             }
                             else {
                                 // edificio incorrecto
                                 System.out.println("Edificio Incorrecto ");
-                                Toast.makeText(getApplicationContext(), "EDIFICIO INCORRECTO ", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "EDIFICIO INCORRECTO ", Toast.LENGTH_SHORT).show();
                                 irAAnimacion(qr, tick.EDIFICIO_INCORRECTO, userData);
                             }
                         } catch (JSONException e) {
@@ -155,7 +155,7 @@ public class escaner extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error response en update solicitud", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Error response en update solicitud", Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {
@@ -229,7 +229,7 @@ public class escaner extends AppCompatActivity {
                             if(response == null){
                                 System.out.println("QR INEXISTENTE.");
 
-                                Toast.makeText(getApplicationContext(), "QR inexistente", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "QR inexistente", Toast.LENGTH_SHORT).show();
                                 irAAnimacion(qr, tick.QR_INEXISTENTE, null);
                                 return; // QR NO EXISTE.
                             }
@@ -238,7 +238,7 @@ public class escaner extends AppCompatActivity {
                             int presenteIngresante = data.getInt("presente");
                             String  id_solicitud = data.getString("idSolicitud");
 
-                            Toast.makeText(getApplicationContext(), "b", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "b", Toast.LENGTH_SHORT).show();
                             String[] userData = {
                                     data.getString("nombre"),
                                     data.getString("nombreActividad"),
@@ -260,14 +260,14 @@ public class escaner extends AppCompatActivity {
                                 // usuario ya ingresado interfaz
                                 //System.out.println("Usuario ya ingresado");
                                 irAAnimacion(qr, tick.QR_REPETIDO, userData);
-                                Toast.makeText(getApplicationContext(), "Usuario ya ingresado", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "Usuario ya ingresado", Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 //Toast.makeText(getApplicationContext(), "e", Toast.LENGTH_SHORT).show();
                                 updateSolicitud(id_solicitud, qr,userData);
                             }
                         } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(), "f " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "f " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
 
@@ -278,7 +278,7 @@ public class escaner extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
                         error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error response en qrscaneado", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Error response en qrscaneado", Toast.LENGTH_SHORT).show();
                     }
                 });
 
