@@ -105,10 +105,10 @@ public class tick extends AppCompatActivity {
         if(userData == null)
             return;
 
-        tv_nombreyapellido.setText(userData[0]);//data.getString("nombre"));
-        tv_actividad.setText(userData[1]);//data.getString("actividad"));
-        tv_edificio.setText(userData[2]);//data.getString("edificio"));
-        tv_dia.setText(userData[3]);//data.getString("dia"));
+        tv_nombreyapellido.setText("Nombre: " + userData[0]);//data.getString("nombre"));
+        tv_actividad.setText("Actividad: " + userData[1]);//data.getString("actividad"));
+        tv_edificio.setText("Edificio: " + userData[2]);//data.getString("edificio"));
+        tv_dia.setText("Fecha de permiso: " + userData[3]);//data.getString("dia"));
     }
 
 
@@ -121,7 +121,7 @@ public class tick extends AppCompatActivity {
 
         if(tipo == QR_INEXISTENTE){
             danger();
-            warningmsgTV.setText("NO EXISTE ESE QR.");
+            warningmsgTV.setText("NO EXISTE SOLICITUD PARA ESE QR.");
         }else if(tipo == QR_REPETIDO){
             danger();
             warningmsgTV.setText("EL QR YA FUE UTILIZADO.");
@@ -132,7 +132,7 @@ public class tick extends AppCompatActivity {
             ShowQRData(qr, userData);
         }else if(tipo == FECHA_INCORRECTA) {
             warning();
-            warningmsgTV.setText("LA FECHA NO ES CORRECTA.");
+            warningmsgTV.setText("EL PERMISO NO ES PARA HOY.");
             ShowQRData(qr, userData);
         }else if(tipo == CORRECTO){
             tick();
