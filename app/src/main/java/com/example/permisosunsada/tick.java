@@ -123,7 +123,7 @@ public class tick extends AppCompatActivity {
             danger();
             warningmsgTV.setText("NO EXISTE SOLICITUD PARA ESE QR.");
         }else if(tipo == QR_REPETIDO){
-            danger();
+            warning();
             warningmsgTV.setText("EL QR YA FUE UTILIZADO.");
             ShowQRData(qr, userData);
         }else if(tipo == EDIFICIO_INCORRECTO){
